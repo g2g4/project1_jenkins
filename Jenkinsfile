@@ -32,7 +32,7 @@ pipeline {
 		stage('testing') { 
             options {
                 timeout(time: 10, unit: 'SECONDS') 
-				retry(3)
+				retry(2)
             }
 			steps { 
                      sh """
