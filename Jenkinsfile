@@ -15,7 +15,14 @@ pipeline {
                     git url: 'git@github.com:g2g4/project1_docker-compose.git'
             }
         }
-		stage('copy docker-compose.yml to remote VM') {
+	    stage('switch to a predefined  branch') { 
+            steps { 
+                    sh """
+                        git checkout $BRANCH
+                    """
+            }
+        }
+	    stage('copy docker-compose.yml to remote VM') {
             steps {
                 sh '''
 		scp docker-compose.yml root@$HOST_IP:/tmp
