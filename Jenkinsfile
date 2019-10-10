@@ -1,7 +1,15 @@
 pipeline {
     agent any
     stages {
-        stage('Clone  repository') { 
+        stage('just delete previous WP on target VM') {
+            steps {
+                sh '''
+                ansible all -i root@$HOST_IP, -m shell -a "docker-compose -f /tmp/docker-compose.yml stop"
+		ansible all -i root@$HOST_IP, -m shell -a "docker-compose -f /tmp/docker-compose.yml rm -f"
+                '''
+            }
+        }
+	    stage('Clone  repository') { 
             steps { 
                     deleteDir()
                     git url: 'git@github.com:g2g4/project1_docker-compose.git'
@@ -10,7 +18,7 @@ pipeline {
 		stage('copy docker-compose.yml to remote VM') {
             steps {
                 sh '''
-				scp docker-compose.yml root@$HOST_IP:/tmp
+		scp docker-compose.yml root@$HOST_IP:/tmp
                 '''
             }
         }
@@ -18,7 +26,7 @@ pipeline {
             steps {
                 sh '''
                 ansible all -i root@$HOST_IP, -m shell -a "docker-compose -f /tmp/docker-compose.yml stop"
-				ansible all -i root@$HOST_IP, -m shell -a "docker-compose -f /tmp/docker-compose.yml rm -f"
+		ansible all -i root@$HOST_IP, -m shell -a "docker-compose -f /tmp/docker-compose.yml rm -f"
                 '''
             }
         }
@@ -36,8 +44,8 @@ pipeline {
             }
 			steps { 
                      sh """
-					    ansible all -i root@$HOST_IP, -m shell -a "docker ps"
-					    curl http://$HOST_IP:8080/wp-admin/install.php
+			ansible all -i root@$HOST_IP, -m shell -a "docker ps"
+			curl http://$HOST_IP:8080/wp-admin/install.php
                     """
             }
         }
