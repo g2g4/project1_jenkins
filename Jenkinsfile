@@ -37,7 +37,7 @@ pipeline {
 			steps { 
                      sh """
 					    ansible all -i root@$HOST_IP, -m shell -a "docker ps"
-					    curl http://$HOST_IP:8080/wp-admin/install.php
+					    curl http://$HOST_IP:88/wp-admin/install.php
                     """
             }
         }
