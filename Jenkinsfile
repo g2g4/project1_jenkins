@@ -1,7 +1,7 @@
 pipeline {
     agent any
     stages {
-        stage('just delete previous WP on target VM') {
+        stage('delete previous WP on target VM') {
             steps {
                 sh '''
                 ansible all -i root@$HOST_IP, -m shell -a "docker-compose -f /tmp/docker-compose.yml stop"
@@ -26,14 +26,6 @@ pipeline {
             steps {
                 sh '''
 		scp docker-compose.yml root@$HOST_IP:/tmp
-                '''
-            }
-        }
-		stage('delete previous WP on target VM') {
-            steps {
-                sh '''
-                ansible all -i root@$HOST_IP, -m shell -a "docker-compose -f /tmp/docker-compose.yml stop"
-		ansible all -i root@$HOST_IP, -m shell -a "docker-compose -f /tmp/docker-compose.yml rm -f"
                 '''
             }
         }
